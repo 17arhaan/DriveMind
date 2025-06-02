@@ -80,7 +80,7 @@ export function AlertsContent() {
   const [activeTab, setActiveTab] = useState("all")
   const [settings, setSettings] = useState(notificationSettings)
 
-  const toggleSetting = (id: string) => {
+  const toggleSetting = (id) => {
     setSettings(settings.map((setting) => (setting.id === id ? { ...setting, enabled: !setting.enabled } : setting)))
   }
 
@@ -92,7 +92,7 @@ export function AlertsContent() {
     return true
   })
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority) => {
     switch (priority) {
       case "high":
         return "bg-red-500/20 text-red-500 border-red-500/30"

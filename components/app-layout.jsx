@@ -1,17 +1,10 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import { Sidebar } from "@/components/sidebar"
 import { Navbar } from "@/components/navbar"
 
-interface AppLayoutProps {
-  children: React.ReactNode
-  title: string
-}
-
-export function AppLayout({ children, title }: AppLayoutProps) {
+export function AppLayout({ children, title }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const toggleSidebar = () => {

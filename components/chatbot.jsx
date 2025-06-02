@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState, useRef, useEffect } from "react"
 import { Bot, X, Send, Loader2, Maximize2, Minimize2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -11,17 +9,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Brain } from "lucide-react"
 
-type Message = {
-  id: string
-  content: string
-  role: "user" | "assistant"
-  timestamp: Date
-}
-
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
-  const [messages, setMessages] = useState<Message[]>([
+  const [messages, setMessages] = useState([
     {
       id: "welcome",
       content:
@@ -32,7 +23,7 @@ export function Chatbot() {
   ])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const messagesEndRef = useRef(null)
 
   // Scroll to bottom of messages
   useEffect(() => {
@@ -41,11 +32,11 @@ export function Chatbot() {
     }
   }, [messages])
 
-  const handleSendMessage = async (e?: React.FormEvent) => {
+  const handleSendMessage = async (e) => {
     if (e) e.preventDefault()
     if (!input.trim()) return
 
-    const userMessage: Message = {
+    const userMessage = {
       id: Date.now().toString(),
       content: input,
       role: "user",
@@ -66,7 +57,7 @@ export function Chatbot() {
         "I've analyzed your frequent routes and found a pattern of congestion between 5-7 PM. Would you like me to suggest optimal departure times?",
       ]
 
-      const botMessage: Message = {
+      const botMessage = {
         id: (Date.now() + 1).toString(),
         content: responses[Math.floor(Math.random() * responses.length)],
         role: "assistant",

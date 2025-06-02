@@ -15,12 +15,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useTheme } from "next-themes"
 
-interface NavbarProps {
-  title: string
-  toggleSidebar: () => void
-}
-
-export function Navbar({ title, toggleSidebar }: NavbarProps) {
+export function Navbar({ title, toggleSidebar }) {
   const { setTheme, theme } = useTheme()
   const [searchOpen, setSearchOpen] = useState(false)
 

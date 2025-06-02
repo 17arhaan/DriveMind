@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -21,18 +19,7 @@ import {
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
-interface SidebarProps {
-  open: boolean
-  setOpen: (open: boolean) => void
-}
-
-interface NavItem {
-  title: string
-  href: string
-  icon: React.ElementType
-}
-
-export function Sidebar({ open, setOpen }: SidebarProps) {
+export function Sidebar({ open, setOpen }) {
   const pathname = usePathname()
   const [mounted, setMounted] = useState(false)
 
@@ -41,7 +28,7 @@ export function Sidebar({ open, setOpen }: SidebarProps) {
     setMounted(true)
   }, [])
 
-  const navItems: NavItem[] = [
+  const navItems = [
     {
       title: "Dashboard",
       href: "/dashboard",
