@@ -147,5 +147,3 @@ Pull requests are welcome! If you want to make a big change, open an issue so we
 MIT
 
 ---
-
-Let me know if you want to add more details or examples!
