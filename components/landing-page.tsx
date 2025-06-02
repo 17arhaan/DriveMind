@@ -39,9 +39,6 @@ export function LandingPage() {
 
   return (
     <div className="relative min-h-screen bg-gradient-to-b from-gray-900 via-stone-900 to-gray-900 overflow-hidden">
-      {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-[url('/placeholder.svg?height=20&width=20')] opacity-[0.03]" />
-
       {/* Animated gradient orb */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-r from-amber-500/10 to-orange-400/5 blur-[100px] animate-slow-pulse" />
 
