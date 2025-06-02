@@ -1,7 +1,5 @@
 "use client"
 
-import type React from "react"
-
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
@@ -113,7 +111,7 @@ export function SignupForm() {
     notificationsAccepted: true,
   })
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (step < 3) {
       setStep(step + 1)
@@ -130,21 +128,21 @@ export function SignupForm() {
     setIsLoading(false)
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }))
   }
 
-  const handleSelectChange = (name: string, value: string) => {
+  const handleSelectChange = (name, value) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }))
   }
 
-  const handleCheckboxChange = (name: string, checked: boolean) => {
+  const handleCheckboxChange = (name, checked) => {
     setFormData((prev) => ({
       ...prev,
       [name]: checked,
@@ -480,7 +478,7 @@ export function SignupForm() {
                       <Checkbox
                         id="terms"
                         checked={formData.termsAccepted}
-                        onCheckedChange={(checked) => handleCheckboxChange("termsAccepted", checked as boolean)}
+                        onCheckedChange={(checked) => handleCheckboxChange("termsAccepted", checked)}
                         className="border-stone-600 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500"
                       />
                       <Label htmlFor="terms" className="text-sm text-stone-300">
@@ -499,9 +497,7 @@ export function SignupForm() {
                       <Checkbox
                         id="dataProcessing"
                         checked={formData.dataProcessingAccepted}
-                        onCheckedChange={(checked) =>
-                          handleCheckboxChange("dataProcessingAccepted", checked as boolean)
-                        }
+                        onCheckedChange={(checked) => handleCheckboxChange("dataProcessingAccepted", checked)}
                         className="border-stone-600 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500"
                       />
                       <Label htmlFor="dataProcessing" className="text-sm text-stone-300">
@@ -513,7 +509,7 @@ export function SignupForm() {
                       <Checkbox
                         id="notifications"
                         checked={formData.notificationsAccepted}
-                        onCheckedChange={(checked) => handleCheckboxChange("notificationsAccepted", checked as boolean)}
+                        onCheckedChange={(checked) => handleCheckboxChange("notificationsAccepted", checked)}
                         className="border-stone-600 data-[state=checked]:bg-amber-500 data-[state=checked]:border-amber-500"
                       />
                       <Label htmlFor="notifications" className="text-sm text-stone-300">

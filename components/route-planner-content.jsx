@@ -10,11 +10,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Separator } from "@/components/ui/separator"
 
 export function RoutePlannerContent() {
-  const [routeDetails, setRouteDetails] = useState<{
-    distance: string
-    duration: string
-    routes: Array<{ id: number; name: string; duration: string; distance: string; traffic: string }>
-  } | null>(null)
+  const [routeDetails, setRouteDetails] = useState(null)
 
   const handleGetRoute = () => {
     // Simulate API call with mock data
