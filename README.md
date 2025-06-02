@@ -191,12 +191,12 @@ python -m drivemind.simulator \
 
 ## Roadmap & Milestones
 
-**Q3 2025**
+**June 2025**
 
 * [ ] Integrate Mumbai Police API (live incident feed)
 * [ ] Driver fatigue detection via cabin camera
 
-**Q4 2025**
+**July 2025**
 
 * [ ] Vehicle-to-everything (V2X) integration
 * [ ] AR windshield projection module
