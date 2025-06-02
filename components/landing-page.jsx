@@ -88,14 +88,54 @@ export function LandingPage() {
           </motion.p>
 
           {/* CTA button */}
-          <motion.div variants={itemVariants}>
-            <Button
+          <motion.div variants={itemVariants} className="relative">
+            {/* Animated glow effect */}
+            <motion.div
+              className="absolute -inset-1 rounded-full bg-gradient-to-r from-amber-400 via-orange-300 to-amber-500 opacity-70 blur-md"
+              animate={{
+                scale: [1, 1.05, 1],
+                opacity: [0.7, 0.9, 0.7],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: "reverse",
+              }}
+            />
+
+            <motion.button
               onClick={() => router.push("/login")}
-              className="px-8 py-6 text-lg bg-amber-500 hover:bg-amber-600 transition-colors h-12 sm:h-14 text-base sm:text-lg font-medium text-gray-900"
+              className="relative px-8 py-3 h-14 sm:h-16 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 text-base sm:text-lg font-medium text-gray-900 flex items-center justify-center gap-2 overflow-hidden shadow-lg shadow-amber-500/20 border border-amber-400/20"
+              whileHover={{
+                scale: 1.03,
+                boxShadow: "0 20px 25px -5px rgba(245, 158, 11, 0.2), 0 8px 10px -6px rgba(245, 158, 11, 0.2)",
+              }}
+              whileTap={{ scale: 0.98 }}
             >
-              Get Started
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              <motion.span
+                className="relative z-10 flex items-center gap-2"
+                initial={{ x: 0 }}
+                whileHover={{ x: -4 }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                Get Started
+                <motion.div
+                  initial={{ x: 0, opacity: 1 }}
+                  whileHover={{ x: 8, opacity: 1 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  <ArrowRight className="h-5 w-5" />
+                </motion.div>
+              </motion.span>
+
+              {/* Subtle gradient overlay */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-tr from-amber-400/20 via-transparent to-amber-300/40"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.button>
           </motion.div>
         </motion.div>
       </div>
