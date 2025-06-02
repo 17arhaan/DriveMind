@@ -19,7 +19,7 @@ DriveMind is your smart companion for navigating the chaos of city traffic. By c
 ## 1. Prerequisites & Setup
 
 **You'll need:**
-- Python, JavaScript/TypeScript (React Native or Flutter)
+- Python, JavaScript (React Native or Flutter)
 - PyTorch/TensorFlow, HuggingFace, Stable-Baselines3/RLlib, YOLOv8/DETR, Whisper
 - FastAPI/Flask, PostgreSQL, Redis
 - Docker, Kubernetes, AWS or GCP
