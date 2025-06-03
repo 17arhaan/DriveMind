@@ -22,7 +22,7 @@ You’ll need:
 
 * Python, JavaScript (React Native or Flutter)
 * PyTorch/TensorFlow, HuggingFace, Stable-Baselines3/RLlib, YOLOv8/DETR, Whisper
-* FastAPI/Flask, PostgreSQL, Redis
+* FastAPI or Flask, PostgreSQL, Redis
 * Docker, Kubernetes, AWS or GCP
 * CARLA or SUMO for simulation
 
@@ -61,7 +61,7 @@ You’ll need:
 ### 7. Deployment
 
 * Dockerize everything, orchestrate with Kubernetes
-* Deploy to AWS or GCP, use S3/Cloud Storage for data
+* Deploy to AWS or GCP, use S3 or Cloud Storage for data
 
 ### 8. Testing & Improvement
 
@@ -79,12 +79,12 @@ You’ll need:
 
 | Weeks | Tasks                                   |
 | :---: | --------------------------------------- |
-|  1-2  | Setup, data acquisition, infrastructure |
-|  3-4  | Preprocessing, data integration         |
-|  5-6  | RL environment, initial agent training  |
+|  1–2  | Setup, data acquisition, infrastructure |
+|  3–4  | Preprocessing, data integration         |
+|  5–6  | RL environment, initial agent training  |
 |   7   | Backend API development                 |
 |   8   | Frontend app development                |
-|  9-10 | Backend/frontend integration            |
+|  9–10 | Backend/frontend integration            |
 |   11  | Cloud deployment                        |
 |   12  | Testing, debugging, polish              |
 
@@ -153,9 +153,9 @@ docker-compose -f docker-compose.dev.yml up --build
 curl -X POST "https://api.drivemind.ai/v1/route" \
   -H "Content-Type: application/json" \
   -d '{
-    "origin": {"lat": 19.0760, "lng": 72.8777},
-    "destination": {"lat": 18.9750, "lng": 72.8258},
-    "preferences": {"eco_mode": true, "avoid_tolls": false}
+    "origin": { "lat": 19.0760, "lng": 72.8777 },
+    "destination": { "lat": 18.9750, "lng": 72.8258 },
+    "preferences": { "eco_mode": true, "avoid_tolls": false }
   }'
 ```
 
@@ -211,7 +211,7 @@ Pull requests are welcome! If you want to make a big change, open an issue so we
 
 ```
 main ← staging ← feature/[JIRA-ID]
-          ↑
+         ↑
        bugfix/[GH-ISSUE]
 ```
 
@@ -227,3 +227,7 @@ MIT
 
 * Mumbai Metropolitan Authority (traffic data)
 * NVIDIA AI City Challenge (baseline models)
+
+---
+
+*Made by Arhaan Girdhar – [github.com/17arhaan/DriveMind](https://github.com/17arhaan/DriveMind)*
