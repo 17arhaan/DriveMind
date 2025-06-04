@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
 import { motion } from "framer-motion"
+import { toast } from "sonner"
 
 export function LoginForm() {
   const router = useRouter()
@@ -24,12 +25,30 @@ export function LoginForm() {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const response = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
 
-    // For demo purposes, redirect to dashboard
-    router.push("/dashboard")
-    setIsLoading(false)
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.detail || 'Login failed')
+      }
+
+      const data = await response.json()
+      localStorage.setItem('token', data.access_token)
+      toast.success('Successfully logged in!')
+      router.push('/dashboard')
+    } catch (error) {
+      console.error('Login error:', error)
+      toast.error(error.message || 'Failed to login. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleInputChange = (e) => {
@@ -39,8 +58,51 @@ export function LoginForm() {
     }))
   }
 
-  const handleGuestAccess = () => {
-    router.push("/dashboard")
+  const handleGuestAccess = async () => {
+    setIsLoading(true)
+    try {
+      const response = await fetch('/api/v1/auth/guest', {
+        method: 'POST',
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to get guest access')
+      }
+
+      const data = await response.json()
+      localStorage.setItem('token', data.access_token)
+      toast.success('Welcome to DriveMind!')
+      router.push('/dashboard')
+    } catch (error) {
+      console.error('Guest access error:', error)
+      toast.error('Failed to get guest access. Please try again.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true)
+    try {
+      // Redirect to Google OAuth endpoint
+      window.location.href = '/api/v1/auth/google'
+    } catch (error) {
+      console.error('Google login error:', error)
+      toast.error('Failed to initiate Google login. Please try again.')
+      setIsLoading(false)
+    }
+  }
+
+  const handleAppleLogin = async () => {
+    setIsLoading(true)
+    try {
+      // Redirect to Apple OAuth endpoint
+      window.location.href = '/api/v1/auth/apple'
+    } catch (error) {
+      console.error('Apple login error:', error)
+      toast.error('Failed to initiate Apple login. Please try again.')
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -170,7 +232,12 @@ export function LoginForm() {
                   </Button>
                 </form>
 
-                <Button onClick={handleGuestAccess} variant="ghost" className="w-full h-14 mt-4 btn-outline">
+                <Button 
+                  onClick={handleGuestAccess} 
+                  variant="ghost" 
+                  className="w-full h-14 mt-4 btn-outline"
+                  disabled={isLoading}
+                >
                   Continue as Guest
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -185,7 +252,12 @@ export function LoginForm() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                  <Button variant="outline" className="h-14 btn-outline">
+                  <Button 
+                    variant="outline" 
+                    className="h-14 btn-outline"
+                    onClick={handleGoogleLogin}
+                    disabled={isLoading}
+                  >
                     <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -206,7 +278,12 @@ export function LoginForm() {
                     </svg>
                     Continue with Google
                   </Button>
-                  <Button variant="outline" className="h-14 btn-outline">
+                  <Button 
+                    variant="outline" 
+                    className="h-14 btn-outline"
+                    onClick={handleAppleLogin}
+                    disabled={isLoading}
+                  >
                     <svg className="mr-3 h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
                     </svg>
