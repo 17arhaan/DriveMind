@@ -88,14 +88,14 @@ const logs = [
 
 export function LogsContent() {
   const [filter, setFilter] = useState("all")
-  const [expandedLog, setExpandedLog] = useState<string | null>(null)
+  const [expandedLog, setExpandedLog] = useState(null)
 
   const filteredLogs = logs.filter((log) => {
     if (filter === "all") return true
     return log.eventType === filter
   })
 
-  const toggleExpand = (id: string) => {
+  const toggleExpand = (id) => {
     setExpandedLog(expandedLog === id ? null : id)
   }
 

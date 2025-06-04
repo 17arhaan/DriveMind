@@ -1,154 +1,188 @@
 "use client"
-
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
-  AlertCircle,
   BarChart3,
-  ChevronLeft,
-  ChevronRight,
-  Cog,
-  Compass,
-  FileVideo,
+  Clock,
+  LayoutDashboard,
   LogOut,
   Map,
-  MapPin,
+  Settings,
   Users,
+  X,
+  AlertTriangle,
+  Navigation,
+  ChevronRight,
+  Activity,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { cn } from "@/lib/utils"
 
-export function Sidebar({ open, setOpen }) {
-  const pathname = usePathname()
-  const [mounted, setMounted] = useState(false)
+const navigationItems = [
+  {
+    title: "Overview",
+    items: [
+      { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard", badge: null },
+      { href: "/live-traffic", icon: BarChart3, label: "Live Traffic", badge: "24" },
+      { href: "/alerts", icon: AlertTriangle, label: "Alerts", badge: "3" },
+    ],
+  },
+  {
+    title: "Navigation",
+    items: [
+      { href: "/route-planner", icon: Map, label: "Route Planner", badge: null },
+      { href: "/route-optimizer", icon: Clock, label: "Route Optimizer", badge: "AI" },
+    ],
+  },
+  {
+    title: "Management",
+    items: [
+      { href: "/logs", icon: Activity, label: "Logs", badge: null },
+      { href: "/users", icon: Users, label: "Users", badge: null },
+      { href: "/settings", icon: Settings, label: "Settings", badge: null },
+    ],
+  },
+]
 
-  // Prevent hydration mismatch
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const navItems = [
-    {
-      title: "Dashboard",
-      href: "/dashboard",
-      icon: BarChart3,
-    },
-    {
-      title: "Live Traffic",
-      href: "/live-traffic",
-      icon: Compass,
-    },
-    {
-      title: "Smart Route Planner",
-      href: "/route-planner",
-      icon: Map,
-    },
-    {
-      title: "Route Optimizer",
-      href: "/route-optimizer",
-      icon: MapPin,
-    },
-    {
-      title: "Audio & Video Logs",
-      href: "/logs",
-      icon: FileVideo,
-    },
-    {
-      title: "Alerts & Notifications",
-      href: "/alerts",
-      icon: AlertCircle,
-    },
-    {
-      title: "User Profiles",
-      href: "/users",
-      icon: Users,
-    },
-    {
-      title: "Settings",
-      href: "/settings",
-      icon: Cog,
-    },
-  ]
-
-  if (!mounted) return null
-
+export function Sidebar({ className, open, setOpen }) {
   return (
     <>
-      {/* Overlay for mobile */}
-      {open && (
-        <div
-          className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm md:hidden"
-          onClick={() => setOpen(false)}
-        />
-      )}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="left" className="p-0 glass-sidebar border-r border-white/10 w-80">
+          <SidebarContent setOpen={setOpen} />
+        </SheetContent>
+      </Sheet>
+      <div className={cn("hidden border-r border-white/10 glass-sidebar lg:block", className)}>
+        <div className="flex h-full w-80 flex-col">
+          <SidebarContent />
+        </div>
+      </div>
+    </>
+  )
+}
 
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-50 flex w-64 flex-col bg-[#1F1B24] transition-transform duration-300 ease-in-out md:relative md:z-0",
-          open ? "translate-x-0" : "-translate-x-full md:translate-x-0 md:w-16",
+function SidebarContent({ setOpen }) {
+  return (
+    <nav className="flex h-full flex-col">
+      {/* Header */}
+      <div className="flex h-16 items-center justify-between border-b border-white/10 px-6">
+        <Link href="/" className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#00CFC1] to-[#00CFC1]/80 shadow-lg">
+            <Navigation className="h-6 w-6 text-[#02111B]" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold text-white">DriveMind</h1>
+            <p className="text-xs text-white/60">Smart Navigation</p>
+          </div>
+        </Link>
+        {setOpen && (
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-white lg:hidden" onClick={() => setOpen(false)}>
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </Button>
         )}
-      >
-        <div className="flex h-16 items-center justify-between px-4">
-          {open && <span className="text-xl font-bold text-white">DriveMind</span>}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="ml-auto text-white hover:bg-cyan-500/20"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
+      </div>
+
+      {/* User Profile Section */}
+      <div className="border-b border-white/10 p-6">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <Avatar className="h-12 w-12 border-2 border-[#00CFC1]/30">
+              <AvatarImage src="/placeholder.svg?height=48&width=48&text=JD" />
+              <AvatarFallback className="bg-[#00CFC1]/20 text-[#00CFC1] font-semibold">JD</AvatarFallback>
+            </Avatar>
+            <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full bg-green-500 border-2 border-[#02111B]" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <h3 className="font-semibold text-white truncate">John Doe</h3>
+            <p className="text-sm text-white/60 truncate">Traffic Manager</p>
+            <div className="flex items-center gap-1 mt-1">
+              <div className="h-2 w-2 rounded-full bg-green-500" />
+              <span className="text-xs text-green-400">Online</span>
+            </div>
+          </div>
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-white/60 hover:text-white">
+            <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
+      </div>
 
-        <nav className="flex-1 space-y-1 px-2 py-4">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "group flex items-center rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ease-in-out",
-                pathname === item.href
-                  ? "bg-cyan-500/20 text-cyan-400"
-                  : "text-gray-300 hover:bg-cyan-500/10 hover:text-cyan-400",
-                !open && "justify-center",
-              )}
-            >
-              <item.icon
-                className={cn(
-                  "h-5 w-5 flex-shrink-0",
-                  pathname === item.href ? "text-cyan-400" : "text-gray-400 group-hover:text-cyan-400",
-                )}
-              />
-              {open && <span className="ml-3">{item.title}</span>}
-              {!open && (
-                <span className="sr-only absolute left-full ml-2 w-auto min-w-max rounded-md bg-black px-2 py-1 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
-                  {item.title}
-                </span>
-              )}
-            </Link>
+      {/* Navigation */}
+      <ScrollArea className="flex-1 px-4 py-4">
+        <div className="space-y-6">
+          {navigationItems.map((section, index) => (
+            <div key={index}>
+              <h4 className="mb-3 px-2 text-xs font-semibold text-white/50 uppercase tracking-wider">
+                {section.title}
+              </h4>
+              <div className="space-y-1">
+                {section.items.map((item) => (
+                  <NavLink key={item.href} {...item} />
+                ))}
+              </div>
+            </div>
           ))}
-        </nav>
-
-        <div className="p-2">
-          <Link
-            href="/"
-            className={cn(
-              "group flex items-center rounded-xl px-3 py-2 text-sm font-medium text-gray-300 transition-all duration-200 ease-in-out hover:bg-red-500/10 hover:text-red-400",
-              !open && "justify-center",
-            )}
-          >
-            <LogOut className={cn("h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-red-400")} />
-            {open && <span className="ml-3">Logout</span>}
-            {!open && (
-              <span className="sr-only absolute left-full ml-2 w-auto min-w-max rounded-md bg-black px-2 py-1 text-xs font-medium text-white opacity-0 group-hover:opacity-100">
-                Logout
-              </span>
-            )}
-          </Link>
         </div>
-      </aside>
-    </>
+      </ScrollArea>
+
+      {/* Logout */}
+      <div className="border-t border-white/10 p-4">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-white/70 hover:text-white hover:bg-white/5 glass rounded-xl h-12"
+        >
+          <LogOut className="mr-3 h-5 w-5" />
+          <span className="font-medium">Log out</span>
+        </Button>
+      </div>
+    </nav>
+  )
+}
+
+function NavLink({ href, icon: Icon, label, badge }) {
+  const pathname = usePathname()
+  const isActive = pathname === href
+
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-all duration-200 group",
+        isActive
+          ? "bg-gradient-to-r from-[#00CFC1]/20 to-[#00CFC1]/10 text-[#00CFC1] shadow-lg border border-[#00CFC1]/30"
+          : "text-white/70 hover:text-white hover:bg-white/5 hover:shadow-md",
+      )}
+    >
+      <div
+        className={cn(
+          "flex h-8 w-8 items-center justify-center rounded-lg transition-colors",
+          isActive
+            ? "bg-[#00CFC1]/20 text-[#00CFC1]"
+            : "bg-white/5 text-white/60 group-hover:bg-white/10 group-hover:text-white",
+        )}
+      >
+        <Icon className="h-4 w-4" />
+      </div>
+      <span className="flex-1">{label}</span>
+      {badge && (
+        <Badge
+          variant={badge === "AI" ? "default" : "secondary"}
+          className={cn(
+            "text-xs font-medium",
+            badge === "AI"
+              ? "bg-gradient-to-r from-purple-500 to-violet-500 text-white border-0"
+              : isActive
+                ? "bg-[#00CFC1]/20 text-[#00CFC1] border-[#00CFC1]/30"
+                : "bg-white/10 text-white/70 border-white/20",
+          )}
+        >
+          {badge}
+        </Badge>
+      )}
+    </Link>
   )
 }

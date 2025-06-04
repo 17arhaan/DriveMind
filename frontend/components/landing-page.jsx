@@ -2,44 +2,17 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Brain, User, ArrowRight } from "lucide-react"
+import { Navigation, MapPin, Route, User, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion"
+import { motion } from "framer-motion"
 
 export function LandingPage() {
   const router = useRouter()
   const [isLoaded, setIsLoaded] = useState(false)
 
-  // Mouse tracking for interactive button
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-
-  // Spring animations for smooth mouse following
-  const springX = useSpring(mouseX, { stiffness: 300, damping: 30 })
-  const springY = useSpring(mouseY, { stiffness: 300, damping: 30 })
-
-  // Transform mouse position to rotation and glow
-  const rotateX = useTransform(springY, [-100, 100], [10, -10])
-  const rotateY = useTransform(springX, [-100, 100], [-10, 10])
-  const glowIntensity = useTransform([springX, springY], ([x, y]) => Math.min(Math.sqrt(x * x + y * y) / 100, 1))
-
   useEffect(() => {
     setIsLoaded(true)
   }, [])
-
-  const handleMouseMove = (e) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-
-    mouseX.set(e.clientX - centerX)
-    mouseY.set(e.clientY - centerY)
-  }
-
-  const handleMouseLeave = () => {
-    mouseX.set(0)
-    mouseY.set(0)
-  }
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -64,10 +37,41 @@ export function LandingPage() {
     },
   }
 
+  const logoVariants = {
+    hidden: { scale: 0, rotate: -180 },
+    visible: {
+      scale: 1,
+      rotate: 0,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        duration: 0.8,
+      },
+    },
+  }
+
+  const iconVariants = {
+    animate: {
+      y: [0, -10, 0],
+      transition: {
+        duration: 2,
+        repeat: Number.POSITIVE_INFINITY,
+        ease: "easeInOut",
+      },
+    },
+  }
+
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-gray-900 via-stone-900 to-gray-900 overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Moving gradient background */}
+      <div className="absolute inset-0 bg-gradient-animate z-0"></div>
+
       {/* Animated gradient orb */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-r from-amber-500/10 to-orange-400/5 blur-[100px] animate-slow-pulse" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-r from-[#00CFC1]/20 via-[#690B22]/15 to-transparent blur-[120px] animate-slow-pulse z-0" />
+
+      {/* Secondary animated orb */}
+      <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full bg-gradient-to-l from-[#00CFC1]/15 to-[#690B22]/10 blur-[100px] animate-slow-pulse-delayed z-0" />
 
       {/* Header with user icon */}
       <header className="absolute top-0 left-0 right-0 z-20 p-4 sm:p-6">
@@ -76,9 +80,9 @@ export function LandingPage() {
             onClick={() => router.push("/login")}
             variant="ghost"
             size="icon"
-            className="h-10 w-10 rounded-full bg-gray-800/50 backdrop-blur-sm border border-stone-700/50 hover:bg-stone-700/50 hover:border-amber-500/30 transition-all duration-200"
+            className="h-10 w-10 rounded-full glass border border-white/20 hover:border-[#00CFC1]/40 transition-all duration-200"
           >
-            <User className="h-5 w-5 text-stone-300" />
+            <User className="h-5 w-5 text-white" />
             <span className="sr-only">Login</span>
           </Button>
         </div>
@@ -94,13 +98,83 @@ export function LandingPage() {
         >
           {/* Logo and title */}
           <motion.div variants={itemVariants} className="mb-8">
-            <div className="inline-flex items-center justify-center p-3 bg-gradient-to-r from-amber-500/20 to-orange-400/20 rounded-2xl backdrop-blur-sm mb-6">
-              <Brain className="h-12 w-12 sm:h-16 sm:w-16 text-amber-400" />
-            </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight">
-              Drive<span className="text-amber-400">Mind</span>
-            </h1>
-            <p className="mt-4 text-lg sm:text-xl md:text-2xl text-stone-300 max-w-3xl mx-auto">
+            <motion.div
+              variants={logoVariants}
+              className="inline-flex items-center justify-center p-4 glass-accent rounded-3xl mb-6 border border-[#00CFC1]/30 relative"
+            >
+              {/* Animated background elements */}
+              <motion.div
+                className="absolute inset-0 rounded-3xl bg-gradient-to-r from-[#00CFC1]/10 to-[#00CFC1]/5"
+                animate={{
+                  scale: [1, 1.05, 1],
+                  opacity: [0.5, 0.8, 0.5],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                }}
+              />
+
+              {/* Main navigation icon */}
+              <motion.div variants={iconVariants} animate="animate" className="relative z-10">
+                <Navigation className="h-16 w-16 sm:h-20 sm:w-20 text-[#00CFC1]" />
+              </motion.div>
+
+              {/* Floating route indicators */}
+              <motion.div
+                className="absolute -top-2 -right-2"
+                animate={{
+                  rotate: 360,
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "linear",
+                }}
+              >
+                <div className="h-6 w-6 rounded-full bg-[#00CFC1]/20 border border-[#00CFC1]/50 flex items-center justify-center">
+                  <Route className="h-3 w-3 text-[#00CFC1]" />
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="absolute -bottom-2 -left-2"
+                animate={{
+                  y: [0, -8, 0],
+                  rotate: [0, 10, 0],
+                }}
+                transition={{
+                  duration: 2.5,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "easeInOut",
+                  delay: 1,
+                }}
+              >
+                <div className="h-6 w-6 rounded-full bg-[#00CFC1]/20 border border-[#00CFC1]/50 flex items-center justify-center">
+                  <MapPin className="h-3 w-3 text-[#00CFC1]" />
+                </div>
+              </motion.div>
+            </motion.div>
+
+            <motion.h1
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight"
+              animate={{
+                textShadow: [
+                  "0 0 20px rgba(0, 207, 193, 0.3)",
+                  "0 0 30px rgba(0, 207, 193, 0.5)",
+                  "0 0 20px rgba(0, 207, 193, 0.3)",
+                ],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Number.POSITIVE_INFINITY,
+                ease: "easeInOut",
+              }}
+            >
+              Drive<span className="text-[#00CFC1]">Mind</span>
+            </motion.h1>
+            <p className="mt-4 text-lg sm:text-xl md:text-2xl text-white/80 max-w-3xl mx-auto">
               AI-Powered Smart Navigation for India
             </p>
           </motion.div>
@@ -108,158 +182,31 @@ export function LandingPage() {
           {/* Description */}
           <motion.p
             variants={itemVariants}
-            className="mb-10 text-stone-400 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed px-4"
+            className="mb-10 text-white/70 max-w-2xl mx-auto text-base sm:text-lg leading-relaxed px-4"
           >
             Revolutionizing traffic management and navigation with advanced AI technology tailored for Indian road
             conditions. Get real-time updates, smart route suggestions, and traffic predictions.
           </motion.p>
 
-          {/* Enhanced CTA button with glass effect and mouse interaction */}
-          <motion.div variants={itemVariants} className="relative">
-            <motion.div
-              className="relative inline-block perspective-1000"
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              style={{
-                perspective: "1000px",
+          {/* Glass effect CTA button */}
+          <motion.div variants={itemVariants} className="flex justify-center">
+            <motion.button
+              onClick={() => router.push("/login")}
+              className="px-8 py-3 rounded-lg btn-glass-white text-white font-medium text-base sm:text-lg flex items-center justify-center gap-2 transition-all duration-300"
+              whileHover={{
+                scale: 1.02,
+                boxShadow: "0 0 30px rgba(0, 207, 193, 0.3)",
               }}
+              whileTap={{ scale: 0.98 }}
             >
-              {/* Animated background glow */}
+              <span>Get Started</span>
               <motion.div
-                className="absolute -inset-4 rounded-full opacity-60 blur-xl"
-                style={{
-                  background: useTransform(
-                    glowIntensity,
-                    [0, 1],
-                    [
-                      "radial-gradient(circle, rgba(245, 158, 11, 0.3) 0%, rgba(251, 191, 36, 0.1) 50%, transparent 100%)",
-                      "radial-gradient(circle, rgba(245, 158, 11, 0.6) 0%, rgba(251, 191, 36, 0.3) 50%, rgba(245, 158, 11, 0.1) 100%)",
-                    ],
-                  ),
-                }}
-                animate={{
-                  scale: [1, 1.1, 1],
-                  opacity: [0.6, 0.8, 0.6],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: "reverse",
-                }}
-              />
-
-              {/* Main button with glass effect */}
-              <motion.button
-                onClick={() => router.push("/login")}
-                className="relative group px-8 py-4 h-16 sm:h-18 rounded-2xl overflow-hidden"
-                style={{
-                  rotateX,
-                  rotateY,
-                  transformStyle: "preserve-3d",
-                }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
               >
-                {/* Glass background layers */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/10 to-transparent backdrop-blur-xl rounded-2xl border border-white/20" />
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-400/30 via-amber-500/20 to-orange-500/30 rounded-2xl" />
-
-                {/* Shimmer effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent rounded-2xl"
-                  animate={{
-                    x: ["-100%", "100%"],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Number.POSITIVE_INFINITY,
-                    repeatType: "loop",
-                    ease: "linear",
-                  }}
-                  style={{
-                    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
-                    transform: "skewX(-20deg)",
-                  }}
-                />
-
-                {/* Interactive glow overlay */}
-                <motion.div
-                  className="absolute inset-0 rounded-2xl"
-                  style={{
-                    background: useTransform(
-                      glowIntensity,
-                      [0, 1],
-                      [
-                        "radial-gradient(circle at center, transparent 0%, transparent 100%)",
-                        "radial-gradient(circle at center, rgba(245, 158, 11, 0.3) 0%, transparent 70%)",
-                      ],
-                    ),
-                  }}
-                />
-
-                {/* Button content */}
-                <motion.div
-                  className="relative z-10 flex items-center justify-center gap-3 text-lg sm:text-xl font-semibold text-white"
-                  style={{
-                    textShadow: "0 2px 10px rgba(0,0,0,0.3)",
-                  }}
-                >
-                  <motion.span
-                    initial={{ x: 0 }}
-                    whileHover={{ x: -4 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  >
-                    Get Started
-                  </motion.span>
-
-                  <motion.div
-                    className="relative"
-                    initial={{ x: 0, rotate: 0 }}
-                    whileHover={{ x: 8, rotate: 45 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  >
-                    <ArrowRight className="h-6 w-6" />
-
-                    {/* Arrow trail effect */}
-                    <motion.div
-                      className="absolute inset-0"
-                      initial={{ opacity: 0, x: -10 }}
-                      whileHover={{ opacity: [0, 1, 0], x: [0, 15, 30] }}
-                      transition={{ duration: 0.6, ease: "easeOut" }}
-                    >
-                      <ArrowRight className="h-6 w-6 text-amber-300" />
-                    </motion.div>
-                  </motion.div>
-                </motion.div>
-
-                {/* Floating particles effect */}
-                {[...Array(6)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-1 h-1 bg-amber-400 rounded-full opacity-60"
-                    style={{
-                      left: `${20 + i * 12}%`,
-                      top: `${30 + (i % 2) * 40}%`,
-                    }}
-                    animate={{
-                      y: [-5, -15, -5],
-                      opacity: [0.6, 1, 0.6],
-                      scale: [1, 1.5, 1],
-                    }}
-                    transition={{
-                      duration: 2 + i * 0.3,
-                      repeat: Number.POSITIVE_INFINITY,
-                      repeatType: "reverse",
-                      delay: i * 0.2,
-                    }}
-                  />
-                ))}
-
-                {/* Border highlight */}
-                <div className="absolute inset-0 rounded-2xl border border-amber-400/50 group-hover:border-amber-400/80 transition-colors duration-300" />
-              </motion.button>
-            </motion.div>
+                <ArrowRight className="h-5 w-5" />
+              </motion.div>
+            </motion.button>
           </motion.div>
         </motion.div>
       </div>

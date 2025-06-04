@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Brain, Eye, EyeOff, Lock, Mail, ArrowLeft, ArrowRight } from "lucide-react"
+import { Eye, EyeOff, Lock, Mail, ArrowLeft, ArrowRight, Navigation, Route } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -44,16 +44,19 @@ export function LoginForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-stone-900 to-gray-900 flex flex-col">
+    <div className="min-h-screen bg-gradient-animate flex flex-col">
       {/* Animated gradient orb */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-r from-amber-500/10 to-orange-400/5 blur-[100px] animate-slow-pulse" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-r from-[#00CFC1]/20 via-[#690B22]/15 to-transparent blur-[120px] animate-slow-pulse z-0" />
+
+      {/* Secondary animated orb */}
+      <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full bg-gradient-to-l from-[#00CFC1]/15 to-[#690B22]/10 blur-[100px] animate-slow-pulse-delayed z-0" />
 
       {/* Full width container with responsive constraints */}
       <div className="flex-1 flex flex-col px-6 py-8 w-full max-w-full sm:max-w-2xl md:max-w-3xl lg:max-w-4xl xl:max-w-5xl mx-auto relative z-10">
         {/* Back to home link */}
         <Link
           href="/"
-          className="inline-flex items-center text-stone-400 hover:text-amber-400 transition-colors mb-8 self-start"
+          className="inline-flex items-center text-white/70 hover:text-[#00CFC1] transition-colors mb-8 self-start"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to home
@@ -66,17 +69,37 @@ export function LoginForm() {
           transition={{ duration: 0.5 }}
           className="flex-1 flex flex-col justify-center"
         >
-          <Card className="border-stone-700/50 bg-gray-800/40 backdrop-blur-sm shadow-2xl w-full">
+          <Card className="border-white/10 glass shadow-2xl w-full bg-[#02111B]/60">
             <CardHeader className="space-y-6 text-center pb-10 px-8 sm:px-12 md:px-16 lg:px-20">
               <div className="flex items-center justify-center gap-3 text-3xl sm:text-4xl font-bold">
-                <Brain className="h-10 w-10 sm:h-12 sm:w-12 text-amber-400" />
+                <div className="relative">
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#00CFC1]/20 to-[#00CFC1]/10 border border-[#00CFC1]/30">
+                    <Navigation className="h-6 w-6 sm:h-8 sm:w-8 text-[#00CFC1]" />
+                  </div>
+                  {/* Animated route indicator */}
+                  <motion.div
+                    className="absolute -top-1 -right-1"
+                    animate={{
+                      rotate: 360,
+                    }}
+                    transition={{
+                      duration: 8,
+                      repeat: Number.POSITIVE_INFINITY,
+                      ease: "linear",
+                    }}
+                  >
+                    <div className="h-4 w-4 rounded-full bg-[#00CFC1]/20 border border-[#00CFC1]/50 flex items-center justify-center">
+                      <Route className="h-2 w-2 text-[#00CFC1]" />
+                    </div>
+                  </motion.div>
+                </div>
                 <span className="text-white">
-                  Drive<span className="text-amber-400">Mind</span>
+                  Drive<span className="text-[#00CFC1]">Mind</span>
                 </span>
               </div>
               <div className="space-y-3">
                 <CardTitle className="text-3xl sm:text-4xl text-white font-semibold">Welcome back</CardTitle>
-                <CardDescription className="text-stone-400 text-lg sm:text-xl">
+                <CardDescription className="text-white/70 text-lg sm:text-xl">
                   Sign in to your account to continue
                 </CardDescription>
               </div>
@@ -87,11 +110,11 @@ export function LoginForm() {
               <div className="max-w-2xl mx-auto w-full">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="space-y-3">
-                    <Label htmlFor="email" className="text-stone-300 text-base font-medium">
+                    <Label htmlFor="email" className="text-white text-base font-medium">
                       Email
                     </Label>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-500" />
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/50" />
                       <Input
                         id="email"
                         name="email"
@@ -99,7 +122,7 @@ export function LoginForm() {
                         placeholder="Enter your email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="pl-12 h-14 text-base bg-stone-700/50 border-stone-600/50 text-white placeholder:text-stone-500 focus:border-amber-500 focus:ring-amber-500/20"
+                        className="pl-12 h-14 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-[#00CFC1] focus:ring-[#00CFC1]/20"
                         required
                       />
                     </div>
@@ -107,18 +130,18 @@ export function LoginForm() {
 
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <Label htmlFor="password" className="text-stone-300 text-base font-medium">
+                      <Label htmlFor="password" className="text-white text-base font-medium">
                         Password
                       </Label>
                       <Link
                         href="/forgot-password"
-                        className="text-base text-amber-400 hover:text-amber-300 hover:underline"
+                        className="text-base text-[#00CFC1] hover:text-[#00CFC1]/80 hover:underline"
                       >
                         Forgot password?
                       </Link>
                     </div>
                     <div className="relative">
-                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-500" />
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/50" />
                       <Input
                         id="password"
                         name="password"
@@ -126,14 +149,14 @@ export function LoginForm() {
                         placeholder="Enter your password"
                         value={formData.password}
                         onChange={handleInputChange}
-                        className="pl-12 pr-14 h-14 text-base bg-stone-700/50 border-stone-600/50 text-white placeholder:text-stone-500 focus:border-amber-500 focus:ring-amber-500/20"
+                        className="pl-12 pr-14 h-14 text-base bg-white/10 border-white/20 text-white placeholder:text-white/40 focus:border-[#00CFC1] focus:ring-[#00CFC1]/20"
                         required
                       />
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
-                        className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 p-0 hover:bg-transparent text-stone-400 hover:text-white"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 h-10 w-10 p-0 hover:bg-transparent text-white/60 hover:text-white"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -142,38 +165,27 @@ export function LoginForm() {
                     </div>
                   </div>
 
-                  <Button
-                    type="submit"
-                    className="w-full h-14 bg-amber-500 hover:bg-amber-600 text-gray-900 font-medium text-lg transition-colors mt-8"
-                    disabled={isLoading}
-                  >
+                  <Button type="submit" className="w-full h-14 btn-primary mt-8" disabled={isLoading}>
                     {isLoading ? "Signing in..." : "Sign In"}
                   </Button>
                 </form>
 
-                <Button
-                  onClick={handleGuestAccess}
-                  variant="ghost"
-                  className="w-full h-14 mt-4 border border-stone-700 hover:bg-stone-800/50 text-stone-300 hover:text-white font-medium text-lg transition-colors"
-                >
+                <Button onClick={handleGuestAccess} variant="ghost" className="w-full h-14 mt-4 btn-outline">
                   Continue as Guest
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
 
                 <div className="relative mt-8">
                   <div className="absolute inset-0 flex items-center">
-                    <Separator className="w-full bg-stone-700/50" />
+                    <Separator className="w-full bg-white/10" />
                   </div>
                   <div className="relative flex justify-center text-sm uppercase">
-                    <span className="bg-gray-800 px-6 text-stone-500 font-medium">OR CONTINUE WITH</span>
+                    <span className="bg-[#02111B] px-6 text-white/50 font-medium">OR CONTINUE WITH</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-                  <Button
-                    variant="outline"
-                    className="h-14 bg-stone-700/30 border-stone-600/50 text-white hover:bg-stone-700/50 hover:border-stone-500 text-base"
-                  >
+                  <Button variant="outline" className="h-14 btn-outline">
                     <svg className="mr-3 h-5 w-5" viewBox="0 0 24 24">
                       <path
                         fill="currentColor"
@@ -194,10 +206,7 @@ export function LoginForm() {
                     </svg>
                     Continue with Google
                   </Button>
-                  <Button
-                    variant="outline"
-                    className="h-14 bg-stone-700/30 border-stone-600/50 text-white hover:bg-stone-700/50 hover:border-stone-500 text-base"
-                  >
+                  <Button variant="outline" className="h-14 btn-outline">
                     <svg className="mr-3 h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
                     </svg>
@@ -205,9 +214,9 @@ export function LoginForm() {
                   </Button>
                 </div>
 
-                <div className="text-center text-base text-stone-400 mt-8">
+                <div className="text-center text-base text-white/70 mt-8">
                   Don't have an account?{" "}
-                  <Link href="/signup" className="text-amber-400 hover:text-amber-300 hover:underline font-medium">
+                  <Link href="/signup" className="text-[#00CFC1] hover:text-[#00CFC1]/80 hover:underline font-medium">
                     Sign up
                   </Link>
                 </div>

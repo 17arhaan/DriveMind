@@ -23,14 +23,14 @@ export function SettingsContent() {
 
   const [isSaving, setIsSaving] = useState(false)
 
-  const handleSwitchChange = (key: string, value: boolean) => {
+  const handleSwitchChange = (key, value) => {
     setSettings((prev) => ({
       ...prev,
       [key]: value,
     }))
   }
 
-  const handleSelectChange = (key: string, value: string) => {
+  const handleSelectChange = (key, value) => {
     setSettings((prev) => ({
       ...prev,
       [key]: value,
